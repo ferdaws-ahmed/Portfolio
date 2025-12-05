@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectCard = () => {
+const ProjectDetails = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const ProjectCard = () => {
     );
 };
 
-export default ProjectCard;
+export default ProjectDetails;

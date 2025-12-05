@@ -5,7 +5,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-screen bg-base-200 flex items-center justify-center px-5 py-20"
+      className="min-h-screen w-10/12 mx-auto flex items-center justify-center px-5 py-20"
     >
       <motion.div
         initial={{ opacity: 0, y: 80 }}
