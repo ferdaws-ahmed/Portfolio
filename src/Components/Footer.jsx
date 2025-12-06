@@ -28,7 +28,7 @@ export default function Footer() {
         <div className="flex justify-center gap-6 mb-8">
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="#"
+            href="https://github.com/ferdaws-ahmed" target="_blank"
             className="p-3 bg-base-100 rounded-full shadow-md hover:text-primary transition"
           >
             <Github />
@@ -36,7 +36,7 @@ export default function Footer() {
 
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="#"
+            href="https://www.linkedin.com/in/md-ferdaws/" target="_black"
             className="p-3 bg-base-100 rounded-full shadow-md hover:text-primary transition"
           >
             <Linkedin />
@@ -44,7 +44,7 @@ export default function Footer() {
 
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="#"
+            href="https://www.facebook.com/profile.php?id=61556248924752" target="_blank"
             className="p-3 bg-base-100 rounded-full shadow-md hover:text-primary transition"
           >
             <Facebook />
