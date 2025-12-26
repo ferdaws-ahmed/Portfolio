@@ -4,16 +4,18 @@ import Skills from "../Sections/Skills";
 import Education from "../Sections/Education";
 import Projects from "../Sections/Projects";
 import Contact from "../Sections/Contact";
+import GitHubActivity from "../Sections/GithubCalender";
 
 export default function Home() {
   return (
     <>
-    <div className="w-10/12 mx-auto">
+    <div className="w-full sm:w-10/12 mx-auto z-10">
         <NavHero />
       <About />
       <Skills />
       <Education />
       <Projects />
+      <GitHubActivity></GitHubActivity>
       <Contact />
     </div>
       

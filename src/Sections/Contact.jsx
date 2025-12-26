@@ -1,102 +1,147 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, MessageCircle } from "lucide-react";
+import { Mail, Phone, MessageCircle, Send, ExternalLink } from "lucide-react";
 
 export default function Contact() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.9 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { type: "spring", stiffness: 100 }
+    },
+  };
+
   return (
     <section
       id="contact"
-      className="min-h-screen w-10/12 mx-auto flex items-center justify-center px-5 py-20"
+      className="relative min-h-screen w-full flex items-center justify-center px-5 py-24 overflow-hidden"
     >
+      {/* Background Glow Decorations */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10" />
+
       <motion.div
-        initial={{ opacity: 0, y: 80 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="max-w-5xl w-full bg-base-100 rounded-2xl shadow-2xl p-8 md:p-12"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.2 }}
+        className="max-w-6xl w-full"
       >
-        {/* Title */}
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-6">
-          Contact <span className="text-primary">Information</span>
-        </h2>
-
-        <p className="text-center text-base-content mb-12 max-w-2xl mx-auto">
-          Want to work with me or have any questions? I’m always open to new
-          opportunities, collaborations, and friendly conversations. Feel free
-          to contact me anytime using the information below.
-        </p>
-
-        {/* Contact Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
-
-          {/* Email */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="p-6 rounded-2xl bg-base-200 shadow-lg flex flex-col items-center text-center gap-4"
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <motion.h2 
+            variants={cardVariants}
+            className="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent"
           >
-            <Mail size={40} className="text-primary" />
-            <h3 className="text-xl font-semibold">Email</h3>
-            <p className="text-base-content/80 break-all">
-              alifmahmud.dev@gmail.com
-            </p>
-            <a
-              href="mailto:alifmahmud.dev@gmail.com"
-              className="btn btn-primary btn-sm mt-2"
-            >
-              Send Email
-            </a>
+            Let's <span className="text-primary">Connect</span>
+          </motion.h2>
+          <motion.p 
+            variants={cardVariants}
+            className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed"
+          >
+            Want to work together or have a question? I'm always open to new
+            opportunities, collaborations, and friendly conversations.
+          </motion.p>
+        </div>
+
+        {/* Contact Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-8">
+          
+          {/* Email Card */}
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ y: -10 }}
+            className="group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-primary/50 to-transparent shadow-2xl transition-all"
+          >
+            <div className="bg-[#0a0a0a] rounded-[2.4rem] p-10 h-full flex flex-col items-center text-center gap-6 border border-white/5">
+              <div className="w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:rotate-[10deg] transition-all duration-500">
+                <Mail size={40} className="text-primary group-hover:text-white transition-colors" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-2">Email</h3>
+                <p className="text-gray-400 text-sm break-all">alifmahmud.dev@gmail.com</p>
+              </div>
+              <a
+                href="mailto:alifmahmud.dev@gmail.com"
+                className="mt-auto flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all"
+              >
+                Send Mail <Send size={18} />
+              </a>
+            </div>
           </motion.div>
 
-          {/* Phone */}
+          {/* Phone Card */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="p-6 rounded-2xl bg-base-200 shadow-lg flex flex-col items-center text-center gap-4"
+            variants={cardVariants}
+            whileHover={{ y: -10 }}
+            className="group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-secondary/50 to-transparent shadow-2xl transition-all"
           >
-            <Phone size={40} className="text-secondary" />
-            <h3 className="text-xl font-semibold">Phone</h3>
-            <p className="text-base-content/80">+880 1610438236</p>
-            <a
-              href="tel:+8801XXXXXXXXX"
-              className="btn btn-secondary btn-sm mt-2"
-            >
-              Call Now
-            </a>
+            <div className="bg-[#0a0a0a] rounded-[2.4rem] p-10 h-full flex flex-col items-center text-center gap-6 border border-white/5">
+              <div className="w-20 h-20 rounded-3xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary group-hover:rotate-[-10deg] transition-all duration-500">
+                <Phone size={40} className="text-secondary group-hover:text-white transition-colors" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-2">Phone</h3>
+                <p className="text-gray-400 text-sm">+880 1610438236</p>
+              </div>
+              <a
+                href="tel:+8801610438236"
+                className="mt-auto flex items-center gap-2 text-secondary font-bold hover:gap-4 transition-all"
+              >
+                Call Now <ExternalLink size={18} />
+              </a>
+            </div>
           </motion.div>
 
-          {/* WhatsApp */}
+          {/* WhatsApp Card */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="p-6 rounded-2xl bg-base-200 shadow-lg flex flex-col items-center text-center gap-4"
+            variants={cardVariants}
+            whileHover={{ y: -10 }}
+            className="group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-success/50 to-transparent shadow-2xl transition-all"
           >
-            <MessageCircle size={40} className="text-success" />
-            <h3 className="text-xl font-semibold">WhatsApp</h3>
-            <p className="text-base-content/80">+880 1610438236</p>
-            <a
-              href="https://wa.me/8801XXXXXXXXX"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-success btn-sm mt-2"
-            >
-              Message on WhatsApp
-            </a>
+            <div className="bg-[#0a0a0a] rounded-[2.4rem] p-10 h-full flex flex-col items-center text-center gap-6 border border-white/5">
+              <div className="w-20 h-20 rounded-3xl bg-success/10 flex items-center justify-center group-hover:bg-success group-hover:scale-110 transition-all duration-500">
+                <MessageCircle size={40} className="text-success group-hover:text-white transition-colors" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-2">WhatsApp</h3>
+                <p className="text-gray-400 text-sm">+880 1610438236</p>
+              </div>
+              <a
+                href="https://wa.me/8801610438236"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-auto flex items-center gap-2 text-success font-bold hover:gap-4 transition-all"
+              >
+                WhatsApp Me <Send size={18} />
+              </a>
+            </div>
           </motion.div>
         </div>
 
-        {/* Footer Text */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-center text-sm text-base-content/70 mt-12"
+        {/* Footer Note */}
+        <motion.div 
+          variants={cardVariants}
+          className="mt-20 text-center bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl inline-block left-1/2 relative -translate-x-1/2"
         >
-          I usually respond within 24 hours. Looking forward to hearing from
-          you 🤝
-        </motion.p>
+          <p className="text-gray-300 flex items-center gap-3">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+            </span>
+            Available for new projects & collaborations
+          </p>
+        </motion.div>
 
       </motion.div>
     </section>
