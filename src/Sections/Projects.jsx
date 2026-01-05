@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
-import { ExternalLink, Github, ArrowUpRight } from "lucide-react"; 
+import { Github, ArrowUpRight } from "lucide-react"; 
 import { useNavigate } from "react-router";
+
+// Images import
 import toyShopImg from "../assets/images/toyshop.png";
 import habituoImg from "../assets/images/habituo.png";
 import simpleApp from "../assets/images/simpleapp.png";
@@ -40,114 +42,126 @@ export const projects = [
 
 export default function Projects() {
   const navigate = useNavigate();
+  const transition = { duration: 0.8, ease: [0.16, 1, 0.3, 1] };
 
   return (
-    <section id="projects" className="py-24 bg-transparent relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="projects" className="py-24  relative overflow-hidden text-white">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         
         {/* --- Section Heading --- */}
-        <div className="flex flex-col items-center mb-20">
+        <div className="flex flex-col items-center mb-20 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="px-6 py-2 border border-primary/30 rounded-full text-primary text-xs font-bold uppercase tracking-[0.3em] mb-4 bg-primary/5"
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={transition}
+            className="px-6 py-2 border border-cyan-500/20 rounded-full text-cyan-400 text-[10px] font-black uppercase tracking-[0.4em] mb-6 bg-cyan-500/5 backdrop-blur-sm"
           >
             Showcase
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black text-center"
+            transition={transition}
+            className="text-5xl md:text-7xl font-black tracking-tighter"
           >
-            Latest <span className="text-primary text-shadow-primary">Works</span>
+            Latest <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent italic">Works</span>
           </motion.h2>
         </div>
 
         {/* --- Projects Grid --- */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: false }}
-              className="group relative h-[450px] rounded-3xl overflow-hidden bg-[#111] border border-white/10"
+              transition={{ ...transition, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group relative h-[500px] rounded-[2.5rem] overflow-hidden bg-[#0a0a0a] border border-white/5 shadow-2xl transform-gpu"
             >
-              {/* Image with Zoom effect */}
-              <motion.img
-                src={project.image}
-                alt={project.name}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-100"
-              />
+              {/* Image Container */}
+              <div className="absolute inset-0 w-full h-full overflow-hidden">
+                <motion.img
+                  src={project.image}
+                  alt={project.name}
+                  whileHover={{ scale: 1.1, rotate: 1 }}
+                  transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-all duration-700 blur-[0.5px] group-hover:blur-0 transform-gpu"
+                />
+              </div>
 
               {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 transition-all duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent z-10 pointer-events-none" />
 
-              {/* Content on Card */}
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <motion.div 
-                  initial={{ y: 20, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  className="space-y-3"
-                >
-                  <span className="text-primary font-bold text-sm tracking-widest uppercase">{project.tagline}</span>
-                  <h3 className="text-3xl font-black text-white">{project.name}</h3>
-                  <p className="text-gray-400 text-sm line-clamp-2 transform group-hover:translate-y-0 transition-all">
+              {/* Card Contents */}
+              <div className="absolute inset-0 p-8 flex flex-col justify-end z-20">
+                <div className="transform group-hover:-translate-y-3 transition-transform duration-700 ease-[0.16,1,0.3,1]">
+                  <span className="text-cyan-400 font-bold text-[10px] tracking-[0.3em] uppercase block mb-2">
+                    {project.tagline}
+                  </span>
+                  <h3 className="text-3xl font-black text-white mb-3 tracking-tight">
+                    {project.name}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 line-clamp-2">
                     {project.shortDesc}
                   </p>
 
-                  {/* Tech Stack Bubbles */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {project.stack.slice(0, 3).map((s) => (
-                      <span key={s} className="text-[10px] px-2 py-1 bg-white/5 border border-white/10 rounded text-gray-300">
+                  {/* Tech Stack */}
+                  <div className="flex flex-wrap gap-2 mb-8 opacity-60 group-hover:opacity-100 transition-opacity">
+                    {project.stack.map((s) => (
+                      <span key={s} className="text-[9px] px-3 py-1 bg-white/5 border border-white/10 rounded-full text-gray-400 backdrop-blur-md font-mono uppercase">
                         {s}
                       </span>
                     ))}
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-4 pt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {/* Action Buttons (Color Updated) */}
+                  <div className="flex items-center gap-3">
                     <button 
                       onClick={() => navigate(`/projects/${project.id}`)}
-                      className="flex-1 bg-white text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary hover:text-white transition-colors"
+                      className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300 text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.4)] active:scale-95"
                     >
-                      Case Study <ArrowUpRight size={18} />
+                      Case Study <ArrowUpRight size={16} />
                     </button>
                     <a 
                       href={project.githubClient} 
                       target="_blank" 
-                      className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all"
+                      rel="noreferrer"
+                      className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-500 text-white"
                     >
-                      <Github size={22} className="text-white" />
+                      <Github size={20} />
                     </a>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
-              {/* Floating ID badge */}
-              <div className="absolute top-6 right-6 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white font-mono font-bold backdrop-blur-md">
+              {/* Number Badge */}
+              <div className="absolute top-6 left-6 w-11 h-11 rounded-2xl border border-white/10 flex items-center justify-center text-[11px] text-white/50 font-mono z-20 bg-black/40 backdrop-blur-xl group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors duration-500">
                 0{index + 1}
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* --- View More CTA (Optional) --- */}
+        {/* --- View More CTA --- */}
         <motion.div 
-          whileInView={{ opacity: 1 }}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={transition}
           className="mt-20 flex justify-center"
         >
-          <div className="relative group cursor-pointer">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-full blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-            <button className="relative px-10 py-4 bg-black rounded-full leading-none flex items-center divide-x divide-gray-600">
-              <span className="pr-6 text-gray-100">Explore All Archives</span>
-              <span className="pl-6 text-primary group-hover:text-gray-100 transition duration-200">Coming Soon &rarr;</span>
-            </button>
-          </div>
+          <button className="relative group px-12 py-5 bg-transparent border border-cyan-500/30 text-white font-black rounded-full overflow-hidden transition-all duration-500 hover:border-cyan-400">
+            <span className="relative z-10 uppercase tracking-[0.3em] text-[10px] group-hover:text-black transition-colors duration-500">
+              Explore Full Archive
+            </span>
+            <div className="absolute inset-0 bg-cyan-400 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[0.16,1,0.3,1]" />
+          </button>
         </motion.div>
       </div>
+
+      {/* Background Glows */}
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] -z-0 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] -z-0 pointer-events-none" />
     </section>
   );
 }

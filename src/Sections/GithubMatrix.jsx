@@ -52,7 +52,7 @@ export default function GitHubMatrix({ username = "ferdaws-ahmed", year = 2025 }
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-20 text-primary font-mono animate-pulse uppercase tracking-[0.3em]">
+      <div className="flex justify-center items-center py-20 text-cyan-400 font-mono animate-pulse uppercase tracking-[0.3em]">
         FETCHING_COMMITS...
       </div>
     );
@@ -64,8 +64,6 @@ export default function GitHubMatrix({ username = "ferdaws-ahmed", year = 2025 }
         <div key={wi} className="flex flex-col gap-[4px] md:gap-[6px]">
           {week.contributionDays.map((day, di) => {
             const isActive = day.contributionCount > 0;
-            
-            // Staggered delay for a natural breathing effect 
             const pulseDelay = ((wi + di) * 0.05).toFixed(2);
 
             return (
@@ -74,10 +72,12 @@ export default function GitHubMatrix({ username = "ferdaws-ahmed", year = 2025 }
                 title={`${day.date}: ${day.contributionCount} Contributions`}
                 className={`matrix-cell ${isActive ? "active-node" : "inactive-node"}`}
                 style={{
-                  width: '12px',
-                  height: '12px',
+                  width: '11px',
+                  height: '11px',
                   borderRadius: '2px',
                   '--pulse-delay': `${pulseDelay}s`,
+                  // Performance optimization: Hardware acceleration trigger
+                  willChange: isActive ? 'transform, opacity' : 'auto'
                 }}
               />
             );
@@ -85,54 +85,53 @@ export default function GitHubMatrix({ username = "ferdaws-ahmed", year = 2025 }
         </div>
       ))}
 
-      {/* BREATHING MATRIX CSS */}
-      
       <style>{`
         .matrix-cell {
           position: relative;
-          transition: transform 0.3s ease, background-color 0.3s ease;
+          /* Optimized transition */
+          transition: transform 0.2s ease-out;
         }
 
         .inactive-node {
-          background-color: rgba(0, 242, 255, 0.03);
-          border: 1px solid rgba(0, 242, 255, 0.08);
+          background-color: rgba(255, 255, 255, 0.03); /* Fixed for Dark BG */
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Fixed Cyber-Cyan Color with Breathing Animation */
         .active-node {
-          background-color: #00f2ff; /* Tomar New Cyan Color */
-          animation: breathingPulse 3.5s infinite ease-in-out;
+          background-color: #00f2ff;
+          /* Breathing animation simplified for performance */
+          animation: breathingPulse 4s infinite ease-in-out;
           animation-delay: var(--pulse-delay);
-          box-shadow: 0 0 8px rgba(0, 242, 255, 0.2);
         }
 
         @keyframes breathingPulse {
           0%, 100% {
             transform: scale(1);
-            opacity: 0.3;
-            background-color: #0066cc; /* Deep Blue when breathing out */
-            box-shadow: 0 0 5px rgba(0, 102, 204, 0.2);
+            opacity: 0.4;
+            background-color: #0088cc;
           }
           50% {
-            transform: scale(1.1);
+            transform: scale(1.05); /* Reduced scale to save repaint costs */
             opacity: 1;
-            background-color: #00f2ff; /* Bright Cyan when breathing in */
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+            background-color: #00f2ff;
           }
         }
 
-        /* Hover Interaction */
+        /* Hover Interaction - Simple and Clean */
         .matrix-cell:hover {
-          transform: scale(1.6) !important;
+          transform: scale(1.5) !important;
           z-index: 50;
           background-color: #ffffff !important;
-          box-shadow: 0 0 25px rgba(0, 242, 255, 0.9) !important;
+          box-shadow: 0 0 15px #00f2ff !important;
           animation: none;
         }
 
-        /* Custom Scrollbar update to match Cyan */
+        /* Custom Scrollbar - Dark Mode Fixed */
+        .custom-scrollbar::-webkit-scrollbar {
+          height: 5px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0, 242, 255, 0.15);
+          background: rgba(0, 242, 255, 0.2);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {

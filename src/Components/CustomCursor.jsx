@@ -1,103 +1,62 @@
-import { useEffect, useState } from "react";
-import { motion, useSpring } from "framer-motion";
+import { useEffect, useCallback } from "react";
+import { motion, useSpring, useMotionValue } from "framer-motion";
 
 export default function CustomCursor() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  // Smooth spring physics for fluid movement
-  const springConfig = { damping: 20, stiffness: 250, mass: 0.5 };
-  const cursorX = useSpring(0, springConfig);
-  const cursorY = useSpring(0, springConfig);
+  // Physics Config: Dot hobe fast, Bubble hobe ektu 'floaty'
+  const dotSpring = { damping: 40, stiffness: 800, mass: 0.1 };
+  const bubbleSpring = { damping: 25, stiffness: 180, mass: 0.6 };
+
+  const dotX = useSpring(mouseX, dotSpring);
+  const dotY = useSpring(mouseY, dotSpring);
+  
+  const bubbleX = useSpring(mouseX, bubbleSpring);
+  const bubbleY = useSpring(mouseY, bubbleSpring);
+
+  const handleMouseMove = useCallback((e) => {
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
+  }, [mouseX, mouseY]);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-
-    const handleMouseOver = (e) => {
-      // Check for links, buttons or cards
-      const target = e.target;
-      if (
-        target.tagName === "A" || 
-        target.tagName === "BUTTON" || 
-        target.closest("button") || 
-        target.closest("a") ||
-        target.getAttribute("role") === "button"
-      ) {
-        setIsHovered(true);
-      } else {
-        setIsHovered(false);
-      }
-    };
-
-    const handleMouseDown = () => setIsClicked(true);
-    const handleMouseUp = () => setIsClicked(false);
-
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseover", handleMouseOver);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseover", handleMouseOver);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [cursorX, cursorY]);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [handleMouseMove]);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
       
-      {/* 1. The Core - Diamond Shape */}
+      {/* 1. Realistic Floating Bubble (Distance Maintaining) */}
       <motion.div
-        className="absolute w-4 h-4 bg-primary rotate-45 flex items-center justify-center shadow-[0_0_15px_#ff005c]"
-        style={{ x: cursorX, y: cursorY, translateX: "-50%", translateY: "-50%" }}
-        animate={{
-          rotate: isHovered ? 225 : 45,
-          scale: isClicked ? 0.8 : isHovered ? 1.5 : 1,
+        className="absolute w-6 h-6 rounded-full border border-white/25"
+        style={{ 
+          x: bubbleX, 
+          y: bubbleY, 
+          // translateX/Y ekhane distance control korche
+          translateX: "12px", 
+          translateY: "12px",
+          background: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15) 0%, transparent 60%)",
+          boxShadow: "inset -1px -1px 4px rgba(255,255,255,0.1), 0 5px 15px rgba(0,0,0,0.2)",
+          backdropFilter: "blur(1px)" // Khub halka blur jate realistic lage
         }}
       >
-        <div className="w-1 h-1 bg-white rounded-full"></div>
+        {/* Specular Highlight (The 'fota' inside bubble) */}
+        <div className="absolute top-1 left-1 w-1 h-1 bg-white/50 rounded-full blur-[0.2px]" />
       </motion.div>
 
-      {/* 2. The Liquid Halo (Slow Follower) */}
+      {/* 2. Sharp Neon Pointer (The Center) */}
       <motion.div
-        className="absolute w-12 h-12 border-2 border-primary/30 rounded-full"
-        animate={{
-          x: mousePos.x,
-          y: mousePos.y,
-          scale: isHovered ? 2 : 1,
-          opacity: isHovered ? 0.8 : 0.4,
-          borderStyle: isHovered ? "dashed" : "solid",
+        className="absolute w-1.5 h-1.5 bg-[#ff005c] rounded-full shadow-[0_0_12px_#ff005c]"
+        style={{ 
+          x: dotX, 
+          y: dotY, 
+          translateX: "-50%", 
+          translateY: "-50%" 
         }}
-        transition={{ type: "spring", damping: 30, stiffness: 100, mass: 1 }}
-        style={{ translateX: "-50%", translateY: "-50%" }}
       />
 
-      {/* 3. Outer Interactive Circle */}
-      <motion.div
-        className="absolute w-2 h-2 bg-secondary/50 rounded-full blur-[2px]"
-        animate={{
-          x: mousePos.x,
-          y: mousePos.y,
-        }}
-        transition={{ type: "spring", damping: 10, stiffness: 50, mass: 2 }} 
-        style={{ translateX: "-50%", translateY: "-50%" }}
-      />
-
-      {/* 4. Mouse Glow (Gradient) */}
-      <div
-        className="absolute w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(255,0,92,0.15)_0%,transparent_70%)] rounded-full pointer-events-none"
-        style={{
-          left: mousePos.x - 200,
-          top: mousePos.y - 200,
-        }}
-      />
     </div>
   );
 }
